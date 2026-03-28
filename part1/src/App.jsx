@@ -6,7 +6,7 @@ const Header = (props) => <div>
 
 const Button = ({ onClick, text }) => <button onClick={onClick}>{text}</button>
 
-const Stats = (props) => <div>
+const Statistics = (props) => <div>
   <li>
       {props.text} {props.number}
   </li>
@@ -30,6 +30,12 @@ const App = () => {
     setBad(bad + 1)
   }
 
+  const total = good + neutral + bad
+
+  const average = (good - bad) / total
+
+  const positive = (good / total) * 100 + " %"
+
 
   return (
     <div>
@@ -38,9 +44,12 @@ const App = () => {
       <Button onClick={handleNeutralClick} text="Neutral" />
       <Button onClick={handleBadClick} text="Bad" />
       <Header title="statistics"/>
-      <Stats text="good" number={good} />
-      <Stats text="neutral" number={neutral} />
-      <Stats text="bad" number={bad} />
+      <Statistics text="good" number={good} />
+      <Statistics text="neutral" number={neutral} />
+      <Statistics text="bad" number={bad} />
+      <Statistics text="all" number={total} />
+      <Statistics text="average" number={average} />
+      <Statistics text="positive" number={positive} />
     </div>
   )
 }
