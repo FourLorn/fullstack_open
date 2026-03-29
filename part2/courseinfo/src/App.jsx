@@ -35,11 +35,14 @@ const Course = (props) => {
 }
 
 const Total = (props) => {
-  let total = 0
-  props.parts.map(part => total += part.exercises)
+const initialTotal = 0
+const totalWithInitial = props.parts.reduce(
+    (accumulator, currentValue) => accumulator + currentValue.exercises,
+    initialTotal,
+  );
   return (
     <p>
-      total of {total} exercises
+      total of {totalWithInitial} exercises
     </p>
   )
 }
