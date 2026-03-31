@@ -3,12 +3,13 @@ import Person from './components/Person'
 
 const App = (props) => {
   const [persons, setPersons] = useState([
-    { name: 'Arto Hellas' }
+    { name: 'Arto Hellas',
+      number: '040-123456'
+     }
   ])
 
-  
-
   const [newName, setNewName] = useState('')
+  const [newNumber, setNewNumber] = useState('')
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -17,14 +18,20 @@ const App = (props) => {
       return
     }
     const personObject = {
-    name: newName,
+      name: newName,
+      number: newNumber
     }
     setPersons(persons.concat(personObject))
     setNewName('')
+    setNewNumber('')
   }
 
-  const handlePersonChange = (event) => {
+  const handleNameChange = (event) => {
     setNewName(event.target.value)
+  }
+
+  const handleNumberChange = (event) => {
+    setNewNumber(event.target.value)
   }
 
   return (
@@ -34,9 +41,15 @@ const App = (props) => {
         <div>
           name: 
           <input value={newName} 
-            onChange={handlePersonChange}
+            onChange={handleNameChange}
           />
-        </div>   
+        </div>
+        <div>
+          number: 
+          <input value={newNumber} 
+            onChange={handleNumberChange}
+          />
+        </div>  
         <div>
           <button type="submit">add</button>
         </div>
@@ -44,7 +57,7 @@ const App = (props) => {
       <h2>Numbers</h2>
       <li>
         {persons.map(person => 
-          <Person key={person.name} person={person} />
+          <Person key={person.name} person={person.name} number={person.number} />
         )}
       </li>
     </div>
