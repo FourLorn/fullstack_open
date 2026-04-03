@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import Person from './components/Person'
 import Search from './components/Search'
 import AddNewPerson from './components/AddNewPerson'
+import personsService from './services/persons'
 
 const App = (props) => {
   const [persons, setPersons] = useState([])
@@ -10,28 +10,27 @@ const App = (props) => {
   const [newNumber, setNewNumber] = useState('')
   const [filterName, setFilterName] = useState('')
 
-    useEffect(() => {
-    axios
-      .get('http://localhost:3001/persons')
-      .then(response => {
-        setPersons(response.data)
-      })
+  useEffect(() => {
+    personsService.getAll().then((initialPersons) => {
+      setPersons(initialPersons)
+    })
   }, [])
 
   const addPerson = (event) => {
     event.preventDefault()
-    if (persons.find(person => person.name === newName)) {
-      alert(`${newName} is already added to phonebook`)
-      return
-    }
-    const personObject = {
+     const personObject = {
       name: newName,
       number: newNumber,
       id: String(persons.length + 1),
     }
-    setPersons(persons.concat(personObject))
-    setNewName('')
-    setNewNumber('')
+    if (persons.find(person => person.name === newName)) {
+      alert(`${newName} is already added to phonebook`)
+      return
+    }
+    personsService.create(personObject).then((returnedPerson) => {
+        setPersons(persons.concat(returnedPerson))
+        setPersons('')
+    })
   }
 
   const handleNameChange = (event) => {
