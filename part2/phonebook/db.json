@@ -22,8 +22,18 @@
     },
     {
       "name": "Lauren Lippert",
-      "number": "1234-9567",
-      "id": "KThX-RQvbmo"
+      "number": "2342",
+      "id": "guxmh1CXqks"
+    },
+    {
+      "name": "Mark Lippert",
+      "number": "567-43530",
+      "id": "Ry70f4CUFiw"
+    },
+    {
+      "name": "test",
+      "number": "78",
+      "id": "z4PhrtYPeB4"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
