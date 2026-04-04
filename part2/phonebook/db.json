@@ -31,9 +31,9 @@
       "id": "Ry70f4CUFiw"
     },
     {
-      "name": "test",
-      "number": "78",
-      "id": "z4PhrtYPeB4"
+      "name": "test2",
+      "number": "2314",
+      "id": "m1JNSgVUlnk"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

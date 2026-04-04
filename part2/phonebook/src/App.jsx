@@ -3,12 +3,17 @@ import Person from './components/Person'
 import Search from './components/Search'
 import AddNewPerson from './components/AddNewPerson'
 import personsService from './services/persons'
+import Notification from './components/Notification'
+import Error from './components/Error'
+import './index.css'
 
 const App = (props) => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filterName, setFilterName] = useState('')
+  const [notificationMessage, setNotificationMessage] = useState(null)
+  const [errorMessage, setErrorMessage] = useState(null)
 
   useEffect(() => {
     personsService.getAll().then((initialPersons) => {
@@ -25,19 +30,41 @@ const App = (props) => {
     const updatePerson = persons.find(person => person.name === newName)
     if (updatePerson != null) {
       if (!window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) return
+      
       personsService
         .update(updatePerson.id, personObject)
-        .then((updatedPerson) => {
-          setPersons(persons.map(person =>
-          person.id === updatePerson.id ? updatedPerson : person
-    ))
-      })
-
+        .then(updatedPerson => {
+          setPersons(persons.map(person => person.id === updatePerson.id ? updatedPerson : person))
+          setNotificationMessage(`Updated '${updatedPerson.name}'`)
+          setTimeout(() => {
+            setNotificationMessage(null)
+          }, 5000)
+        })
+        .catch(error => {
+          setErrorMessage(`the person does not exist`)
+          setTimeout(() => {
+            setErrorMessage(null)
+          }, 5000)
+          setPersons(persons.filter(p => p.id !== updatePerson.id))
+          
+        })
       return 
     }
-    personsService.create(personObject).then((returnedPerson) => {
+    personsService
+      .create(personObject)
+      .then(returnedPerson => {
         setPersons(persons.concat(returnedPerson))
+        setNotificationMessage(`Added '${returnedPerson.name}'`)
+        setTimeout(() => {
+            setNotificationMessage(null)
+        }, 5000)
     })
+      .catch(error => {
+        setErrorMessage('the person does not exist')
+        setTimeout(() => {
+          setErrorMessage(null)
+        }, 5000)
+      })
   }
 
   const deletePerson = (id) => {
@@ -46,7 +73,7 @@ const App = (props) => {
     personsService.deletePerson(id).then(() => {
       setPersons(persons.filter(p => p.id !== id))
     })
-    .catch((error) => {
+    .catch(error => {
       alert(`the person does not exist`)
       setPersons(persons.filter(p => p.id !== id))
     })
@@ -73,6 +100,8 @@ const App = (props) => {
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notificationMessage} />
+      <Error message={errorMessage} />
       <Search value={filterName} onChange={handleFilterChange} />
       <h2>Add a New Person</h2>
       <AddNewPerson
